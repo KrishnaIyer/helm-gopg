@@ -30,4 +30,5 @@ type Config struct {
 // Signer provides signing functions.
 type Signer interface {
 	Sign(ctx context.Context, message []byte) ([]byte, error)
+	Verify(ctx context.Context, signedMessage []byte) error
 }

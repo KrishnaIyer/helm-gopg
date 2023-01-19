@@ -15,14 +15,9 @@
 package cmd
 
 import (
-	"bytes"
 	"context"
-	"crypto/sha256"
 	"fmt"
-	"io"
 	"log"
-	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -44,6 +39,7 @@ var (
 	config  = &Config{}
 	manager *conf.Manager
 	ctx     = context.Background()
+	sig     signer.Signer
 
 	// Root is the root of the commands.
 	Root = &cobra.Command{
@@ -61,82 +57,22 @@ This tool uses the well-maintained https://github.com/ProtonMail/gopenpgp librar
 			if config.Package == "" {
 				return fmt.Errorf("package is required")
 			}
-			return nil
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			var (
-				signer signer.Signer
-				err    error
-			)
 			if config.Signer.Type == "" {
 				config.Signer.Type = "pgp"
 			}
 			switch config.Signer.Type {
 			case "pgp":
-				signer, err = config.Signer.PGP.NewSigner()
+				sig, err = config.Signer.PGP.NewSigner()
 				if err != nil {
 					return err
 				}
 			default:
 				return fmt.Errorf("unsupported signer: %s", config.Signer.Type)
 			}
-
-			//Calculate the SHA256 sum of the (zipped) package.
-			f, err := os.Open(config.Package)
-			if err != nil {
-				log.Fatal("could not open package: %w", err)
-			}
-			defer f.Close()
-			val, err := io.ReadAll(f)
-			if err != nil {
-				log.Fatal("could not read package: %w", err)
-			}
-			h := sha256.New()
-			_, err = h.Write(val)
-			if err != nil {
-				log.Fatal("could not calculate checksum: %w", err)
-			}
-			checksum := fmt.Sprintf("%x", h.Sum(nil))
-
-			// Get the Chart.yaml file and its contents.
-			raw := bytes.NewBuffer(val)
-			chartYAML, err := extractChartYAML(raw)
-			if err != nil {
-				log.Fatal("could not extract Chart.yaml from package: ", err)
-			}
-
-			// Generate the provenance file.
-			pkgParts := strings.Split(config.Package, "/")
-			p := bytes.NewBuffer(nil)
-			p.Write(chartYAML)
-			p.Write([]byte("\n...\nfiles:\n"))
-			p.Write([]byte(fmt.Sprintf("  %s: sha256:%s", pkgParts[len(pkgParts)-1], checksum)))
-			prov := strings.ReplaceAll(p.String(), "- ", " - - ") // Replace starting dashes as per RFC4880 (https://www.rfc-editor.org/rfc/rfc4880#section-7.1)
-
-			// Sign the provenance file.
-			signed, err := signer.Sign(ctx, []byte(prov))
-			if err != nil {
-				log.Fatal("could not sign provenance file: ", err)
-			}
-
-			var w io.Writer
-			if config.StdOut {
-				w = os.Stdout
-			} else {
-				f, err = os.Create(fmt.Sprintf("%s.prov", config.Package))
-				if err := f.Chmod(0644); err != nil {
-					log.Fatal("could not set permissions on provenance file: ", err)
-				}
-				w = f
-				if err != nil {
-					log.Fatal("could not create provenance file: ", err)
-				}
-			}
-			_, err = w.Write([]byte(signed))
-			if err != nil {
-				log.Fatal("could not write provenance file: %w", err)
-			}
 			return nil
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
 		},
 	}
 )
@@ -153,4 +89,6 @@ func init() {
 	manager.InitFlags(*config)
 	manager.AddConfigFlag(manager.Flags())
 	Root.PersistentFlags().AddFlagSet(manager.Flags())
+	Root.AddCommand(SignCommand(Root))
+	Root.AddCommand(VerifyCommand(Root))
 }
