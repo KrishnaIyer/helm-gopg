@@ -89,7 +89,7 @@ func SignCommand(root *cobra.Command) *cobra.Command {
 				log.Fatal("could not write provenance file: %w", err)
 			}
 
-			log.Println("Signed package:", config.Package)
+			log.Println("Signed Helm package", config.Package)
 			return nil
 		},
 	}
