@@ -3,6 +3,9 @@
 init:
 	@echo "Initialize repository..."
 
+deps:
+	go mod download && go mod tidy
+
 .PHONY: test
 
 test:
