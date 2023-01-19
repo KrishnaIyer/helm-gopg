@@ -4,7 +4,7 @@ A simple tool written in Golang to package and sign Helm charts without needing 
 
 ## Basic Usage
 
-```bash
+```
 helm-gopg is a tool written in Golang to sign Helm charts without needing to install GPG.
 This tool uses the well-maintained https://github.com/ProtonMail/gopenpgp library for signing
 
