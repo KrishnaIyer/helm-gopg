@@ -19,3 +19,15 @@ test:
 	@rm chart-0.1.0.tgz
 	@rm chart-0.1.0.tgz.prov
 
+.PHONY: version
+
+version:
+	@cat version
+
+bump.patch:
+	@echo "Bump patch version..."
+	@./bump_version.sh patch
+
+bump.minor:
+	@echo "Bump minor version..."
+	@./bump_version.sh minor
