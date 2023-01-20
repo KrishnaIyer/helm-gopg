@@ -17,3 +17,7 @@
 # Testing files
 *.tgz
 *.prov
+
+main
+
+*.vscode

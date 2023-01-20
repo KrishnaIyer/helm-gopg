@@ -1,4 +1,4 @@
-// Copyright © 2022 Krishna Iyer Easwaran
+// Copyright © 2023 Krishna Iyer Easwaran
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,9 +54,6 @@ This tool uses the well-maintained https://github.com/ProtonMail/gopenpgp librar
 			if err != nil {
 				panic(err)
 			}
-			if config.Package == "" {
-				return fmt.Errorf("package is required")
-			}
 			if config.Signer.Type == "" {
 				config.Signer.Type = "pgp"
 			}
@@ -91,4 +88,5 @@ func init() {
 	Root.PersistentFlags().AddFlagSet(manager.Flags())
 	Root.AddCommand(SignCommand(Root))
 	Root.AddCommand(VerifyCommand(Root))
+	Root.AddCommand(VersionCommand(Root))
 }
