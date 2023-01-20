@@ -2,7 +2,49 @@
 
 A simple tool written in Golang to package and sign Helm charts without needing GPG installed.
 
-## Basic Usage
+## Helm Plugin
+
+This tool is intended to be installed as a [Helm Plugin](https://helm.sh/docs/topics/plugins/#helm).
+
+Head over to the [Releases Page](https://github.com/KrishnaIyer/helm-gopg/releases) and download the the tar (`.tar.gz`) file for the required environment from one of the available versions.
+
+Unpack the tar archive.
+
+Install the plugin
+
+```bash
+$ helm plugin install <unpacked-archive>
+Installed plugin: gopg
+```
+
+For Example:
+```bash
+$ helm plugin install ~/Downloads/helm-gopg_0.3.0_darwin_amd64
+Installed plugin: gopg
+```
+
+For macOS, allow permissions for this binary to run in `Privacy and Security`.
+
+Now you can access commands using `helm gopg <command> <flags>`.
+
+```bash
+$ helm gopg version
+helm-gopg
+---------
+Version: 0.2.0
+Git Commit: bad69093617c84bc20840603ad8b831fbe310fd8
+Build Date: 2023-01-20T11:48:52Z
+Go version: go1.19.5
+OS/Arch: darwin/amd64
+```
+
+To sign packages run the following
+
+```bash
+$ helm gopg sign --package <package> --signer.pgp.passphrase <passphrase> --signer.pgp.private-key <private-key>
+```
+
+## Standalone Usage
 
 ```
 helm-gopg is a tool written in Golang to sign Helm charts without needing to install GPG.
@@ -42,10 +84,6 @@ The Helm package and the provenance file can be verified using
 ```bash
 $ helm-gopg verify --package <package> --signer.pgp.public-key <public-key>
 ```
-
-### Helm Plugin
-
-This tool can be installed as a [Helm Plugin](https://helm.sh/docs/topics/plugins/#helm).
 
 ## License
 
