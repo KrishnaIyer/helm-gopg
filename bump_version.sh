@@ -28,3 +28,7 @@ echo $new_version > VERSION
 echo "Updating plugin.yaml file..."
 sed -i '' "s/$current_version/$new_version/g" plugin.yaml
 
+echo "Commit changes and tag"
+git add VERSION plugin.yaml
+git commit -m "Bump version to v$new_version"
+git tag v$new_version
