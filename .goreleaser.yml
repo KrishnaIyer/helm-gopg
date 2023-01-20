@@ -30,6 +30,7 @@ archives:
   files:
     - LICENSE
     - README.md
+    - plugin.yaml
   format: tar.gz
 
 checksum:
