@@ -1,0 +1,6 @@
+name: "gopg"
+version: "0.1.0"
+usage: "Sign Helm packages without GPG"
+description: |-
+  This plugin helps sign Helm packages without GPG.
+command: "$HELM_PLUGIN_DIR/helm-gopg"
