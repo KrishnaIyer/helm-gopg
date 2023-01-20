@@ -1,5 +1,5 @@
 name: "gopg"
-version: "0.2.0"
+version: "0.3.0"
 usage: "Sign Helm packages without GPG"
 description: |-
   This plugin helps sign Helm packages without GPG.
