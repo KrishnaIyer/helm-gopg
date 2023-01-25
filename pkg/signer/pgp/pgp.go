@@ -17,7 +17,9 @@ package pgp
 
 import (
 	"context"
+	"log"
 	"os"
+	"strings"
 
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
@@ -48,6 +50,18 @@ func (c *Config) NewSigner() (*Signer, error) {
 		privKey, err = os.ReadFile(c.PrivateKey)
 		if err != nil {
 			return nil, err
+		}
+		// Convert to an armored private key if it is not already.
+		if !strings.Contains(string(privKey), "BEGIN PGP PRIVATE KEY BLOCK") {
+			k, err := crypto.NewKey(privKey)
+			if err != nil {
+				log.Fatal("could not read key: %w", err)
+			}
+			key, err := k.Armor()
+			if err != nil {
+				log.Fatal("could not armor key: %w", err)
+			}
+			privKey = []byte(key)
 		}
 	}
 	if c.PublicKey != "" {
