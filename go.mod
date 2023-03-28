@@ -3,15 +3,15 @@ module krishnaiyer.dev/golang/helm-gopg
 go 1.19
 
 require (
-	github.com/ProtonMail/gopenpgp/v2 v2.6.0
+	github.com/ProtonMail/gopenpgp/v2 v2.6.1
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	krishnaiyer.dev/golang/dry v0.0.0-20221204094448-a2d18c26bb44
 )
 
 require (
-	github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8 // indirect
-	github.com/ProtonMail/go-mime v0.0.0-20221031134845-8fd9bc37cf08 // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20230321155629-9a39f2531310 // indirect
+	github.com/ProtonMail/go-mime v0.0.0-20230322103455-7d82a3887f2f // indirect
 	github.com/cloudflare/circl v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
