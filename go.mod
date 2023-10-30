@@ -3,7 +3,7 @@ module krishnaiyer.dev/golang/helm-gopg
 go 1.19
 
 require (
-	github.com/ProtonMail/gopenpgp/v2 v2.7.3
+	github.com/ProtonMail/gopenpgp/v2 v2.7.4
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/pflag v1.0.5
 	krishnaiyer.dev/golang/dry v0.0.0-20221204094448-a2d18c26bb44
